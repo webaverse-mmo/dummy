@@ -1,0 +1,5 @@
+{
+  "name": "dummy",
+  "description": "dummy for target practice",
+  "start_url": "index.js"
+}
