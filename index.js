@@ -49,6 +49,13 @@ export default () => {
     mixer = new THREE.AnimationMixer( o.scene );
     clips = o.animations;
     o = o.scene;
+
+    o.traverse(obj => {
+      if(obj.isMesh) {
+        obj.castShadow = true;
+      }
+    });
+
     app.add(o);
     
     const physicsId = physics.addGeometry(o);
