@@ -45,7 +45,6 @@ export default () => {
 
   });
 
-  let physicsIds = [];
   (async () => {
     const u = `${baseUrl}dummy.glb`;
     let o = await new Promise((accept, reject) => {
@@ -65,7 +64,6 @@ export default () => {
     app.add(o);
     
     physicsId = physics.addGeometry(o);
-    // physicsIds.push(physicsId);
   })();
   app.removePhysicsObjects = () => {
     removePhysic = true;
@@ -75,9 +73,7 @@ export default () => {
   }
   
   useCleanup(() => {
-    // for (const physicsId of physicsIds) {
-      physics.removeGeometry(physicsId);
-    // }
+    physics.removeGeometry(physicsId);
   });
 
   return app;
