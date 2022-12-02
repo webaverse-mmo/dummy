@@ -29,8 +29,14 @@ export default () => {
     }
   }
 
-  useFrame(({timeDiff}) => {
+  let physicsId = null;
+  let removePhysic = false;
+  const frame = useFrame(({timeDiff}) => {
 
+    if (removePhysic && physicsId) {
+      physics.removeGeometry(physicsId);
+      physicsId = null;
+    }
     if(mixer) {
       const deltaSeconds = timeDiff / 1000;
       mixer.update(deltaSeconds);
@@ -39,7 +45,6 @@ export default () => {
 
   });
 
-  let physicsIds = [];
   (async () => {
     const u = `${baseUrl}dummy.glb`;
     let o = await new Promise((accept, reject) => {
@@ -58,14 +63,17 @@ export default () => {
 
     app.add(o);
     
-    const physicsId = physics.addGeometry(o);
-    physicsIds.push(physicsId);
+    physicsId = physics.addGeometry(o);
   })();
+  app.removePhysicsObjects = () => {
+    removePhysic = true;
+  }
+  app.removeSubApps = () => {
+    frame.cleanup();
+  }
   
   useCleanup(() => {
-    for (const physicsId of physicsIds) {
-      physics.removeGeometry(physicsId);
-    }
+    physics.removeGeometry(physicsId);
   });
 
   return app;
